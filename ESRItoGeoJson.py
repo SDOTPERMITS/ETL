@@ -29,7 +29,7 @@ SADA data is expected to come is as geometry collection.
 
 
 
-def getGeo(geometry):
+def getGeo(geometry, boolPointOnly):
     #implied geometry.isMultiPart is True
         #Maybe make this explicit, holes in polygons are different from multipolygons
     geometryESRIType = geometry.type
@@ -97,7 +97,7 @@ def genDict(cursor):
 
 def toGeoJson(in_table, outPath, field_names = '*', where_clause = '', spatial_reference = '4326', sql_clause =(None, None), explode_to_points = False, allowBlob = False, boolPointOnly = False ):
 
-    shapeType = ("SHAPE@XY" if boolPointOnly else 'SHAPE@')
+    shapeType = ("SHAPE@TRUECENTROID" if boolPointOnly else 'SHAPE@')
     
 
     with open(outPath, 'w') as outfile:
@@ -136,6 +136,6 @@ fieldies = ['PERMIT_NO_NUM', 'USE_CODE','USE_EXP_DATE', 'USE_EXP_DATE']
 outfolder = r'V:\StUse\09 - Data and GIS\Data\repos\geo\JSON'
 outName = '31Ds.geojson'
 outpath = outfolder + '\\' + outName
-where_clause = 'USE_CODE = "31D"' # GOD FORBID YOU USE THE WRONG KIND OF QUOTES
+where_clause = "USE_CODE = '31D'" # GOD FORBID YOU USE THE WRONG KIND OF QUOTES
 toGeoJson(pathy,outpath, fieldies, where_clause, boolPointOnly = True)   
 
