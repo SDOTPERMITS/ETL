@@ -29,37 +29,44 @@ SADA data is expected to come is as geometry collection.
 
 
 
-def getGeo(geometry, boolPointOnly):
+def getGeo(geometry):
     #implied geometry.isMultiPart is True
         #Maybe make this explicit, holes in polygons are different from multipolygons
-    geometryESRIType = geometry.type
-    jsonESRIFormat = geometry.JSON.replace(',null', '')#remove the nulls, IDK maybe replace with 'NULL'
-            
-    if geometryESRIType == u'point':
-        geoTypeGEOJSON  = 'Point'
-        d =  json.loads(jsonESRIFormat)
-        coords = [d['x'], d['y']]
-            
-        dictGeo = {"geometry" : {
-                            "type" : geoTypeGEOJSON,
-                            "coordinates": coords # paths not valid for point or multipoint
-                            }
-                }
+    if isinstance(geometry, tuple) or isinstance(geometry,list):
+            dictGeo = {"geometry" : {
+                                "type" : 'Point',
+                                "coordinates": list(geometry) # paths not valid for point or multipoint
+                                }
+                    }
     else:
-        if geometryESRIType     ==  u'polygon':
-            geoTypeGEOJSON  = 'Polygon'
-            coordKey = 'rings'
-        elif geometryESRIType   == u'multipoint':
-            geoTypeGEOJSON  = 'MultiPoint'
-            coordKey = 'points'
-        elif geometryESRIType   == u'polyline':
-            geoTypeGEOJSON  = 'MultiLineString'
-            coordKey = 'paths'
-          
+        geometryESRIType = geometry.type
+        jsonESRIFormat = geometry.JSON.replace(',null', '')#remove the nulls, IDK maybe replace with 'NULL'
             
-        dictGeo ={  "type" : geoTypeGEOJSON,
-                    "coordinates": json.loads(jsonESRIFormat)[coordKey] # paths not valid for point or multipoint
-                }
+        if geometryESRIType == u'point':
+            geoTypeGEOJSON  = 'Point'
+            d =  json.loads(jsonESRIFormat)
+            coords = [d['x'], d['y']]
+                
+            dictGeo = {"geometry" : {
+                                "type" : geoTypeGEOJSON,
+                                "coordinates": coords # paths not valid for point or multipoint
+                                }
+                    }
+        else:
+            if geometryESRIType     ==  u'polygon':
+                geoTypeGEOJSON  = 'Polygon'
+                coordKey = 'rings'
+            elif geometryESRIType   == u'multipoint':
+                geoTypeGEOJSON  = 'MultiPoint'
+                coordKey = 'points'
+            elif geometryESRIType   == u'polyline':
+                geoTypeGEOJSON  = 'MultiLineString'
+                coordKey = 'paths'
+              
+                
+            dictGeo ={  "type" : geoTypeGEOJSON,
+                        "coordinates": json.loads(jsonESRIFormat)[coordKey] # paths not valid for point or multipoint
+                    }
                     
     return dictGeo
 
@@ -84,6 +91,7 @@ def getProperties(dtype, cur, idxsDate=[]):
     return dict(    map(lambda i: convertProperty(dtype[i], cur[i]) , range(1,len(cur)))   )
 
 def genDict(cursor):
+    #boolPointOnly is nested way yo f*ng deep. I'll just leave it here anyway
     desc = cursor._dtype.descr
     for cur in cursor:
         geometry = cur[0]
@@ -97,9 +105,8 @@ def genDict(cursor):
 
 def toGeoJson(in_table, outPath, field_names = '*', where_clause = '', spatial_reference = '4326', sql_clause =(None, None), explode_to_points = False, allowBlob = False, boolPointOnly = False ):
 
-    shapeType = ("SHAPE@TRUECENTROID" if boolPointOnly else 'SHAPE@')
+    shapeType = ('SHAPE@TRUECENTROID' if boolPointOnly else 'SHAPE@') #just read it from the geometry object, the various cursor calls are nice, but geometry objects are cool/.
     
-
     with open(outPath, 'w') as outfile:
         outfile.write('{"type": "FeatureCollection","features": [\n')
         fields = arcpy.ListFields(in_table)
@@ -120,7 +127,7 @@ def toGeoJson(in_table, outPath, field_names = '*', where_clause = '', spatial_r
         field_names =  [shapeType] +  map(lambda f: f.name, fields)#OKAY, AT THE FRONT IS FINE
         print field_names
         cursor = arcpy.da.SearchCursor(in_table, field_names, where_clause, spatial_reference, explode_to_points, sql_clause)
-        
+        print cursor.next()
         gen = genDict(cursor)
         json.dump(gen.next(), outfile, indent = 4)
         for d in gen:
