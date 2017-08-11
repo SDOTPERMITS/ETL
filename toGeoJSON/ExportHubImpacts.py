@@ -15,7 +15,7 @@ permitNos = tuple(str(i[0]) for i in d['values'] if i)
 
 
 
-where_clause = "CLOSURE_TYPE IN ( 'CLOSED', 'INT CLOSUR', 'PRT CLOSED', 'XXX') AND PERMIT_STAT <> 'Complete' AND PERMIT_NO_NUM IN "+str(permitNos)
+where_clause = "PERMIT_NO_NUM IN "+str(permitNos)
 pathSource = r'V:\StUse\09 - Data and GIS\Data\STREETUSE.gdb\SU_Permit_Impacts' # remember to refresh
 fields = ['PERMIT_NO_NUM', 'USE_CODE', 'LOC_TYPE', 'CLOSURE_TYPE', 'DAY_OR_TIME_RESTRICTION', 'PEAK_OK', 'APPLICANT_COMPANY_NAME', 'PERMIT_LOCATION_TEXT','PLANNED_PROJECT_TEXT','USE_START_DATE', 'USE_EXP_DATE', 'REPORT_GROUP']
 
