@@ -156,9 +156,7 @@ with arcpy.da.InsertCursor(tblImpactEvents, lfImpactEvents) as insertCurTblImpac
 
                lrInfo = getLRInfoFromBLOCKFACE(segkey, loctype, impactSide, dictBlockface, ntLinearRef) #CREATE A NEW ROW
                newRow = fieldMapNewRow(ntupPermit, impact, lrInfo, dictImpactEventSchema)
-               if impact.PERMIT_NO_NUM == '354368':
-                   foo = ungraceful
-               #insertCurTblImpactLocations.insertRow(newRow)
+               insertCurTblImpactLocations.insertRow(newRow)
            
 
 #====================

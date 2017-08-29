@@ -21,10 +21,7 @@ fieldNames_Maybe = ['Agency / Unit', 'Project Status', 'Project Type', 'Project 
                     'Project Description', 'On Street', 'From ', 'To', 'PM Name', 'PM Phone', 'PM Email',
                     'Communications Contact Name', 'Communications Phone', 'Communications Email', 'Agency Reference',
                     'Funded', 'Construction Start Date', 'Construction End Date', 'Paving C2C and I2I',
-                    'Impact Start Date', 'Impact End Date', 'Impact Type', 'Street Use Permit Number']
-
-
-
+                    'Impact Start Date', 'Impact End Date', 'Impact Type', 'Street Use Permit Number']#LOL THESE ARE NOW THE ACTUAL NAMES...
 
 def geoCode(strSingleLineInput, strRetformat='dict'):
     # returns dict of ESRIJSON
@@ -63,7 +60,7 @@ mvwBlock = pathH8 + '\\' + 'HANSEN_RPT.MVW_GIS_BLOCK'
 # LOAD MVW GIS BLOCK INTO A LIST OF NAMED TUPLES
 tupBlock = namedtuple('block', ['COMPKEY', 'UNITID', 'UNITID2', 'UNITIDSORT', 'ONSTREET', 'XSTRLO', 'XSTRHI'])
 cursorBlock = arcpy.da.SearchCursor(mvwBlock,
-                                    field_names=['SEGKEY', 'SEG_UNITID', 'SEG_UNITID2', 'UNITIDSORT', 'ONSTREET',
+                                    field_names=['SEGKEY', 'SEG_UNITID', 'SEG_UNITID2', 'UNITIDSORT', 'ONSTREET', 'ORD_STNAME_CONCAT',
                                                  'NORMALIZED_XSTRLO', 'NORMALIZED_XSTRHI'])
 listBlocks = map(lambda row: tupBlock(*row), cursorBlock)  # believe in yourself
 del cursorBlock  # DON"T GET CAUGHT STEPPING
@@ -73,7 +70,6 @@ dictStreet = {'COMPKEY (SEGKEY)': 'SHAPE'}
 cursorStreets = arcpy.da.SearchCursor(fcStreets, field_names=['COMPKEY', 'SHAPE@'])
 dictStreet = dict((s[0], s[1]) for s in cursorStreets)
 del cursorStreets  # DON"T GET CAUGHT TRIPPING
-
 
 def geoCodeRow(onStreet, loStreet, hiStreet):
     # type: (str, str, str) -> list

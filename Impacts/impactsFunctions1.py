@@ -1,149 +1,151 @@
 from collections import namedtuple, defaultdict
 import sys
 
-dictReportGroup = {' 1 ':[' ROW Management','CNSTRCTN']
-' 1A ':[' Urban Forestry','URBNFOR']
-' 1B ':[' Urban Forestry','URBNFOR']
-' 1C ':[' Urban Forestry','URBNFOR']
-' 1D ':[' Urban Forestry','URBNFOR']
-' 2 ':[' Renewables','ANNUALS']
-' 2A ':[' Renewables','ANNUALS']
-' 3 ':[' Renewables','ANNUALS']
-' 3A ':[' Public Space Management','ANNUALS']
-' 3B ':[' Public Space Management','ANNUALS']
-' 3C ':[' Public Space Management','ANNUALS']
-' 3D ':[' Renewables','ANNUALS']
-' 5 ':[' Renewables','ANNUALS']
-' 5A ':[' Public Space Management','ANNUALS']
-' 6 ':[' Renewables','ANNUALS']
-' 6A ':[' Renewables','ANNUALS']
-' 7 ':[' Renewables','ANNUALS']
-' 7A ':[' Renewables','ANNUALS']
-' 7B ':[' Renewables','ANNUALS']
-' 8 ':[' Renewables','ANNUALS']
-' 9 ':[' Renewables','ANNUALS']
-' 11 ':[' Street Ends','ANNUALS']
-' 12 ':[' Renewables','ANNUALS']
-' 12A ':[' Renewables','ANNUALS']
-' 13 ':[' Public Space Management','ANNUALS']
-' 14 ':[' Renewables','ANNUALS']
-' 14A ':[' Vending','ANNUALS']
-' 14B ':[' Renewables','ANNUALS']
-' 14C ':[' Vending','ANNUALS']
-' 14D ':[' Vending','ANNUALS']
-' 14E ':[' Vending','ANNUALS']
-' 15 ':[' Public Space Management','ANNUALS']
-' 15A ':[' Renewables','ANNUALS']
-' 16 ':[' Renewables','ANNUALS']
-' 16A ':[' Renewables','ANNUALS']
-' 16B ':[' Renewables','ANNUALS']
-' 17 ':[' Renewables','ANNUALS']
-' 18 ':[' Cafes','ANNUALS']
-' 18A ':[' Renewables','ANNUALS']
-' 18B ':[' Cafes','ANNUALS']
-' 18C ':[' Renewables','ANNUALS']
-' 19A ':[' Vending','ANNUALS']
-' 19B ':[' Vending','ANNUALS']
-' 19C ':[' Vending','ANNUALS']
-' 19D ':[' Vending','ANNUALS']
-' 19E ':[' Vending','ANNUALS']
-' 19F ':[' Vending','ANNUALS']
-' 19G ':[' Vending','ANNUALS']
-' 19H ':[' Vending','ANNUALS']
-' 19I ':[' Vending - Curb space','ANNUALS']
-' 19J ':[' Vending','ANNUALS']
-' 21 ':[' Renewables','ANNUALS']
-' 21A ':[' Renewables','ANNUALS']
-' 21B ':[' Renewables','ANNUALS']
-' 22 ':[' Shoring & Excavation','SHREXC']
-' 22B ':[' ROW Management','CNSTRCTN']
-' 23 ':[' ROW Management','CNSTRCTN']
-' 25 ':[' ROW Management','CNSTRCTN']
-' 26 ':[' ROW Management','CNSTRCTN']
-' 26A ':[' ROW Management','CNSTRCTN']
-' 27 ':[' ROW Management','CNSTRCTN']
-' 27A ':[' Renewables','ANNUALS']
-' 28 ':[' ROW Management','CNSTRCTN']
-' 29 ':[' ROW Management','CNSTRCTN']
-' 29A ':[' Renewables','ANNUALS']
-' 29B ':[' ROW Management','CNSTRCTN']
-' 29C ':[' ROW Management','CNSTRCTN']
-' 31 ':[' ROW Management','CNSTRCTN']
-' 31B ':[' ROW Management','CNSTRCTN']
-' 31C ':[' ROW Management','CNSTRCTN']
-' 31D ':[' ROW Management','CNSTRCTN']
-' 33 ':[' Renewables','ANNUALS']
-' 33A ':[' Truck Permits','CNSTRCTN']
-' 33B ':[' Truck Permits','UTIL']
-' 34 ':[' ROW Management','CNSTRCTN']
-' 35 ':[' ROW Management','CNSTRCTN']
-' 37 ':[' ROW Management','CNSTRCTN']
-' 38 ':[' ROW Management','CNSTRCTN']
-' 38A ':[' Urban Forestry','URBNFOR']
-' 40 ':[' ROW Management','CNSTRCTN']
-' 41 ':[' ROW Management','CNSTRCTN']
-' 43 ':[' ROW Management','CNSTRCTN']
-' 44 ':[' ROW Management','CNSTRCTN']
-' 45 ':[' SIP','IMPRV']
-' 45A ':[' SIP','IMPRV']
-' 45B ':[' SIP','IMPRV']
-' 45D ':[' Reviews','IMPRV']
-' 45P ':[' Reviews','IMPRV']
-' 46 ':[' ROW Management','CNSTRCTN']
-' 47 ':[' ROW Management','CNSTRCTN']
-' 48 ':[' Renewables','ANNUALS']
-' 49 ':[' ROW Management','CNSTRCTN']
-' 50 ':[' ROW Management','CNSTRCTN']
-' 50A ':[' ROW Management','CNSTRCTN']
-' 51 ':[' Major Utilities','UTIL']
-' 51A ':[' Major Utilities','UTIL']
-' 51B ':[' ROW Management','UTIL']
-' 51C ':[' ROW Management','UTIL']
-' 51D ':[' ROW Management','UTIL']
-' 51E ':[' ROW Management','UTIL']
-' 51F ':[' ROW Management','UTIL']
-' 51G ':[' ROW Management','UTIL']
-' 51H ':[' ROW Management','UTIL']
-' 51I ':[' ROW Management','UTIL']
-' 51J ':[' ROW Management','UTIL']
-' 51K ':[' ROW Management','UTIL']
-' 51L ':[' ROW Management','UTIL']
-' 51M ':[' ROW Management','UTIL']
-' 51N ':[' ROW Management','UTIL']
-' 51O ':[' ROW Management','UTIL']
-' 52 ':[' Renewables','ANNUALS']
-' 52A ':[' Public Space Management','ANNUALS']
-' 52B ':[' Renewables','ANNUALS']
-' 52C ':[' Urban Forestry','URBNFOR']
-' 52D ':[' Public Space Management','ANNUALS']
-' 54 ':[' ROW Management','CNSTRCTN']
-' 54A ':[' ROW Management','CNSTRCTN']
-' 54B ':[' Block Party Playstreets','ANNUALS']
-' 54C ':[' ROW Management','CNSTRCTN']
-' 55 ':[' ROW Management','CNSTRCTN']
-' 55A ':[' ROW Management','CNSTRCTN']
-' 61 ':[' Term Limited Permits','TERMS']
-' 61A ':[' Term Limited Permits','TERMS']
-' 61B ':[' Term Limited Permits','TERMS']
-' 61C ':[' Term Limited Permits','TERMS']
-' 61D ':[' Term Limited Permits','TERMS']
-' 61E ':[' Term Limited Permits','TERMS']
-' 61F ':[' Term Limited Permits','TERMS']
-' 61G ':[' Term Limited Permits','TERMS']
-' 61H ':[' Term Limited Permits','TERMS']
-' 61I ':[' Term Limited Permits','TERMS']
-' 61J ':[' Term Limited Permits','TERMS']
-' 61K ':[' Term Limited Permits','TERMS']
-' 61L ':[' Term Limited Permits','TERMS']
-' 61M ':[' Term Limited Permits','TERMS']
-' 61N ':[' Term Limited Permits','TERMS']
-' 61O ':[' Term Limited Permits','TERMS']
-' 61P ':[' Term Limited Permits','TERMS']
-' UNK ':[' None','NONE']
-' WW100 ':[' Waterways','ANNUALS']
-' WW150 ':[' Waterways','ANNUALS']
-' WW200 ':[' Waterways','ANNUALS']
-' WW250 ':[' Waterways','ANNUALS']
+dictReportGroup = {'1':[ 'ROW Management','CNSTRCTN'],
+'1A':[ 'Urban Forestry','URBNFOR'],
+'1B':[ 'Urban Forestry','URBNFOR'],
+'1C':[ 'Urban Forestry','URBNFOR'],
+'1D':[ 'Urban Forestry','URBNFOR'],
+'2':[ 'Renewables','ANNUALS'],
+'2A':[ 'Renewables','ANNUALS'],
+'3':[ 'Renewables','ANNUALS'],
+'3A':[ 'Public Space Management','ANNUALS'],
+'3B':[ 'Public Space Management','ANNUALS'],
+'3C':[ 'Public Space Management','ANNUALS'],
+'3D':[ 'Renewables','ANNUALS'],
+'5':[ 'Renewables','ANNUALS'],
+'5A':[ 'Public Space Management','ANNUALS'],
+'6':[ 'Renewables','ANNUALS'],
+'6A':[ 'Renewables','ANNUALS'],
+'7':[ 'Renewables','ANNUALS'],
+'7A':[ 'Renewables','ANNUALS'],
+'7B':[ 'Renewables','ANNUALS'],
+'8':[ 'Renewables','ANNUALS'],
+'9':[ 'Renewables','ANNUALS'],
+'11':[ 'Street Ends','ANNUALS'],
+'12':[ 'Renewables','ANNUALS'],
+'12A':[ 'Renewables','ANNUALS'],
+'13':[ 'Public Space Management','ANNUALS'],
+'14':[ 'Renewables','ANNUALS'],
+'14A':[ 'Vending','ANNUALS'],
+'14B':[ 'Renewables','ANNUALS'],
+'14C':[ 'Vending','ANNUALS'],
+'14D':[ 'Vending','ANNUALS'],
+'14E':[ 'Vending','ANNUALS'],
+'15':[ 'Public Space Management','ANNUALS'],
+'15A':[ 'Renewables','ANNUALS'],
+'16':[ 'Renewables','ANNUALS'],
+'16A':[ 'Renewables','ANNUALS'],
+'16B':[ 'Renewables','ANNUALS'],
+'17':[ 'Renewables','ANNUALS'],
+'18':[ 'Cafes','ANNUALS'],
+'18A':[ 'Renewables','ANNUALS'],
+'18B':[ 'Cafes','ANNUALS'],
+'18C':[ 'Renewables','ANNUALS'],
+'19A':[ 'Vending','ANNUALS'],
+'19B':[ 'Vending','ANNUALS'],
+'19C':[ 'Vending','ANNUALS'],
+'19D':[ 'Vending','ANNUALS'],
+'19E':[ 'Vending','ANNUALS'],
+'19F':[ 'Vending','ANNUALS'],
+'19G':[ 'Vending','ANNUALS'],
+'19H':[ 'Vending','ANNUALS'],
+'19I':[ 'Vending - Curb space','ANNUALS'],
+'19J':[ 'Vending','ANNUALS'],
+'21':[ 'Renewables','ANNUALS'],
+'21A':[ 'Renewables','ANNUALS'],
+'21B':[ 'Renewables','ANNUALS'],
+'22':[ 'Shoring & Excavation','SHREXC'],
+'22B':[ 'ROW Management','CNSTRCTN'],
+'23':[ 'ROW Management','CNSTRCTN'],
+'25':[ 'ROW Management','CNSTRCTN'],
+'26':[ 'ROW Management','CNSTRCTN'],
+'26A':[ 'ROW Management','CNSTRCTN'],
+'27':[ 'ROW Management','CNSTRCTN'],
+'27A':[ 'Renewables','ANNUALS'],
+'28':[ 'ROW Management','CNSTRCTN'],
+'29':[ 'ROW Management','CNSTRCTN'],
+'29A':[ 'Renewables','ANNUALS'],
+'29B':[ 'ROW Management','CNSTRCTN'],
+'29C':[ 'ROW Management','CNSTRCTN'],
+'31':[ 'ROW Management','CNSTRCTN'],
+'31B':[ 'ROW Management','CNSTRCTN'],
+'31C':[ 'ROW Management','CNSTRCTN'],
+'31D':[ 'ROW Management','CNSTRCTN'],
+'33':[ 'Renewables','ANNUALS'],
+'33A':[ 'Truck Permits','CNSTRCTN'],
+'33B':[ 'Truck Permits','UTIL'],
+'34':[ 'ROW Management','CNSTRCTN'],
+'35':[ 'ROW Management','CNSTRCTN'],
+'37':[ 'ROW Management','CNSTRCTN'],
+'38':[ 'ROW Management','CNSTRCTN'],
+'38A':[ 'Urban Forestry','URBNFOR'],
+'40':[ 'ROW Management','CNSTRCTN'],
+'41':[ 'ROW Management','CNSTRCTN'],
+'43':[ 'ROW Management','CNSTRCTN'],
+'44':[ 'ROW Management','CNSTRCTN'],
+'45':[ 'SIP','IMPRV'],
+'45A':[ 'SIP','IMPRV'],
+'45B':[ 'SIP','IMPRV'],
+'45D':[ 'Reviews','IMPRV'],
+'45P':[ 'Reviews','IMPRV'],
+'46':[ 'ROW Management','CNSTRCTN'],
+'47':[ 'ROW Management','CNSTRCTN'],
+'48':[ 'Renewables','ANNUALS'],
+'49':[ 'ROW Management','CNSTRCTN'],
+'50':[ 'ROW Management','CNSTRCTN'],
+'50A':[ 'ROW Management','CNSTRCTN'],
+'51':[ 'Major Utilities','UTIL'],
+'51A':[ 'Major Utilities','UTIL'],
+'51B':[ 'ROW Management','UTIL'],
+'51C':[ 'ROW Management','UTIL'],
+'51D':[ 'ROW Management','UTIL'],
+'51E':[ 'ROW Management','UTIL'],
+'51F':[ 'ROW Management','UTIL'],
+'51G':[ 'ROW Management','UTIL'],
+'51H':[ 'ROW Management','UTIL'],
+'51I':[ 'ROW Management','UTIL'],
+'51J':[ 'ROW Management','UTIL'],
+'51K':[ 'ROW Management','UTIL'],
+'51L':[ 'ROW Management','UTIL'],
+'51M':[ 'ROW Management','UTIL'],
+'51N':[ 'ROW Management','UTIL'],
+'51O':[ 'ROW Management','UTIL'],
+'52':[ 'Renewables','ANNUALS'],
+'52A':[ 'Public Space Management','ANNUALS'],
+'52B':[ 'Renewables','ANNUALS'],
+'52C':[ 'Urban Forestry','URBNFOR'],
+'52D':[ 'Public Space Management','ANNUALS'],
+'54':[ 'ROW Management','CNSTRCTN'],
+'54A':[ 'ROW Management','CNSTRCTN'],
+'54B':[ 'Block Party Playstreets','ANNUALS'],
+'54C':[ 'ROW Management','CNSTRCTN'],
+'55':[ 'ROW Management','CNSTRCTN'],
+'55A':[ 'ROW Management','CNSTRCTN'],
+'61':[ 'Term Limited Permits','TERMS'],
+'61A':[ 'Term Limited Permits','TERMS'],
+'61B':[ 'Term Limited Permits','TERMS'],
+'61C':[ 'Term Limited Permits','TERMS'],
+'61D':[ 'Term Limited Permits','TERMS'],
+'61E':[ 'Term Limited Permits','TERMS'],
+'61F':[ 'Term Limited Permits','TERMS'],
+'61G':[ 'Term Limited Permits','TERMS'],
+'61H':[ 'Term Limited Permits','TERMS'],
+'61I':[ 'Term Limited Permits','TERMS'],
+'61J':[ 'Term Limited Permits','TERMS'],
+'61K':[ 'Term Limited Permits','TERMS'],
+'61L':[ 'Term Limited Permits','TERMS'],
+'61M':[ 'Term Limited Permits','TERMS'],
+'61N':[ 'Term Limited Permits','TERMS'],
+'61O':[ 'Term Limited Permits','TERMS'],
+'61P':[ 'Term Limited Permits','TERMS'],
+'UNK':[ 'None','NONE'],
+'WW100':[ 'Waterways','ANNUALS'],
+'WW150':[ 'Waterways','ANNUALS'],
+'WW200':[ 'Waterways','ANNUALS'],
+'WW250':[ 'Waterways','ANNUALS']
+
+
 }
 
 def getSideFromWidth(width):

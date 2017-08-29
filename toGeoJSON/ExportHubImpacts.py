@@ -1,14 +1,22 @@
 import ESRItoGeoJson
 import urllib
 import json
-#get all the permit numbers in the survey
-key='AIzaSyDloPy4bZG17gjJJM3nA4QubA3LGixa5EM'
-urlSheet = r'https://sheets.googleapis.com/v4/spreadsheets/1iG5b-uoYC7fXgOm1qWZvUpnJcgNQI-gCDiCmRXP0d6o/values/Form%20Responses%201'
-rng = '!h2:h1000'
-urlJSON = urlSheet + rng+'?key='+key
-print urlJSON
 
-d = json.loads(urllib.urlopen(urlJSON).read())
+
+def getRange(rng):
+    
+    #get all the permit numbers in the survey
+    key='AIzaSyDloPy4bZG17gjJJM3nA4QubA3LGixa5EM'
+    urlSheet = r'https://sheets.googleapis.com/v4/spreadsheets/1iG5b-uoYC7fXgOm1qWZvUpnJcgNQI-gCDiCmRXP0d6o/values/Form%20Responses%201'
+    rng = '!h2:h1000'
+    urlJSON = urlSheet + rng+'?key='+key
+    print urlJSON
+
+    d = json.loads(urllib.urlopen(urlJSON).read())
+    return d
+
+
+d = getRange('!h2:h1000')
 permitNos = tuple(str(i[0]) for i in d['values'] if i)
 
 
@@ -23,4 +31,4 @@ outfolder = r'V:\StUse\09 - Data and GIS\Data\repos\geo\JSON'
 outName = 'HubConstruction.geojson'
 
 outpath = outfolder + '\\' + outName
-ESRItoGeoJson.toGeoJson(pathSource, outpath, fields, where_clause, boolPointOnly = True) 
+ESRItoGeoJson.toGeoJson(pathSource, outpath, fields, where_clause, boolPointOnly = False) 
